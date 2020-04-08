@@ -31,7 +31,7 @@ namespace ConsoleApp
                 builder.SetMinimumLevel(LogLevel.Debug).AddConsole();
             });
 
-            // email provider
+            // smtp provider
             var emailProvider = new SmtpProvider(new SmtpProviderOptions
             {
                 Server = _smtpServer,
@@ -41,11 +41,9 @@ namespace ConsoleApp
                 UseSSL = _smtpUseSsl
             }, loggerFactory);
 
-            var providerFactory = NotificationProviderFactory.GetInstance();
-            providerFactory.AddProvider(emailProvider);
-
-            // instantiate notification object
-            var notification = new Notification(loggerFactory.CreateLogger<Notification>(), providerFactory);
+            // get notification instance
+            var notification = Notification.GetInstance(loggerFactory.CreateLogger<Notification>());
+            notification.AddProvider(emailProvider);
 
             // email message
             var message = new EmailMessage
