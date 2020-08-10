@@ -20,17 +20,35 @@
     {
         <div class="alert-danger">@Model.Message</div>
     }
+</div>
 
-<form method="post">
-    <input type="hidden" name="data" value="@Newtonsoft.Json.JsonConvert.SerializeObject(Model.WeatherData)" />
-    <div class="form-group">
-        <label asp-for="Email"></label>
-        <input asp-for="Email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>
+<div class="card">
+    <div class="card-body">
+        <form method="post">
+            <input type="hidden" name="data" value="@Newtonsoft.Json.JsonConvert.SerializeObject(Model.WeatherData)" />
+            <div class="form-group">
+                <label asp-for="Email"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <button class="btn btn-primary" asp-page-handler="smtp">Email Me (via SMTP)</button>
+            <button class="btn btn-primary" asp-page-handler="sendgrid">Email Me (via SendGrid)</button>
+        </form>
     </div>
-    <button class="btn btn-primary" asp-page-handler="smtp">Email Me (via SMTP)</button>
-    <button class="btn btn-primary" asp-page-handler="sendgrid">Email Me (via SendGrid)</button>
-</form>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form method="post">
+            <input type="hidden" name="data" value="@Newtonsoft.Json.JsonConvert.SerializeObject(Model.WeatherData)" />
+            <div class="form-group">
+                <label asp-for="Mobile"></label>
+                <input asp-for="Mobile" class="form-control" />
+                <span asp-validation-for="Mobile" class="text-danger"></span>
+            </div>
+            <button class="btn btn-warning" asp-page-handler="twilio">Send Me SMS(via Twilio)</button>
+        </form>
+    </div>
 </div>
 
 @section Scripts {

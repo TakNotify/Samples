@@ -41,7 +41,13 @@ namespace Web
                 {
                     options.Apikey = Configuration.GetValue<string>("SendGrid:ApiKey");
                     options.DefaultFromAddress = Configuration.GetValue<string>("SendGrid:DefaultFromAddress");
-                });
+                })
+                .AddProvider<TwilioProvider, TwilioOptions>(options =>
+                {
+                    options.AccountSid = Configuration.GetValue<string>("Twilio:AccountSid");
+                    options.AuthToken = Configuration.GetValue<string>("Twilio:AuthToken");
+                    options.DefaultFromNumber = Configuration.GetValue<string>("Twilio:DefaultFromNumber");
+                }, true);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
