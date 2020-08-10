@@ -34,11 +34,22 @@ namespace Web.Pages
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
+        [BindProperty]
+        [Required]
+        [Display(Name = "Your Mobile Number")]
+        [DataType(DataType.PhoneNumber)]
+        public string Mobile { get; set; }
+
         public void OnGet()
         {
             if (TempData["Email"] != null)
             {
                 Email = TempData["Email"] as string;
+            }
+
+            if (TempData["Mobile"] != null)
+            {
+                Mobile = TempData["Mobile"] as string;
             }
 
             if (TempData["SuccessMessage"] != null)
@@ -114,6 +125,33 @@ namespace Web.Pages
             {
                 TempData["ErrorMessage"] = $"Failed to send notification to {string.Join(", ", message.ToAddresses)} via SendGrid. Please see the log.";
                 _logger.LogWarning("Failed to send notification to {toAddresses} via SendGrid. Error: {error}", message.ToAddresses, result.Errors);
+            }
+
+            return RedirectToPage();
+        }
+
+        public async Task<IActionResult> OnPostTwilio(string data)
+        {
+            var message = new SMSMessage()
+            {
+                ToNumber = Mobile,
+                Content = $"Forecast: {data}"
+            };
+
+            var result = await _notification.SendSmsWithTwilio(message);
+
+            TempData["Mobile"] = Mobile;
+            TempData["WeatherData"] = data;
+
+            if (result.IsSuccess)
+            {
+                TempData["SuccessMessage"] = $"SMS notification was sent to {message.ToNumber} via Twilio";
+                _logger.LogDebug("SMS notification was sent to {toNumber} via Twilio", message.ToNumber);
+            }
+            else
+            {
+                TempData["ErrorMessage"] = $"Failed to send notification to {Mobile} via Twilio. Please see the log.";
+                _logger.LogWarning("Failed to send notification to {toNumber} via Twilio. Error: {error}", message.ToNumber, result.Errors);
             }
 
             return RedirectToPage();
