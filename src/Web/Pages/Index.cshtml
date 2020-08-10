@@ -1,0 +1,38 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<h1>Weather Forecast:</h1>
+<ul class="my-5">
+    @foreach (var item in Model.WeatherData)
+    {
+        <li>@item.Date.ToLongDateString() - @item.Summary (@item.TemperatureC C)</li>
+    }
+</ul>
+<div>
+    @if (Model.IsSuccess && !string.IsNullOrEmpty(Model.Message))
+    {
+        <div class="alert-info">@Model.Message</div>
+    }
+    else if (!string.IsNullOrEmpty(Model.Message))
+    {
+        <div class="alert-danger">@Model.Message</div>
+    }
+
+<form method="post">
+    <input type="hidden" name="data" value="@Newtonsoft.Json.JsonConvert.SerializeObject(Model.WeatherData)" />
+    <div class="form-group">
+        <label asp-for="Email"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <button class="btn btn-primary" asp-page-handler="smtp">Email Me (via SMTP)</button>
+    <button class="btn btn-primary" asp-page-handler="sendgrid">Email Me (via SendGrid)</button>
+</form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
