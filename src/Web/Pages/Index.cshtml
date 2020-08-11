@@ -33,6 +33,7 @@
             </div>
             <button class="btn btn-primary" asp-page-handler="smtp">Email Me (via SMTP)</button>
             <button class="btn btn-primary" asp-page-handler="sendgrid">Email Me (via SendGrid)</button>
+            <button class="btn btn-primary" asp-page-handler="mailgun">Email Me (via Mailgun)</button>
         </form>
     </div>
 </div>
@@ -46,7 +47,7 @@
                 <input asp-for="Mobile" class="form-control" />
                 <span asp-validation-for="Mobile" class="text-danger"></span>
             </div>
-            <button class="btn btn-warning" asp-page-handler="twilio">Send Me SMS(via Twilio)</button>
+            <button class="btn btn-warning" asp-page-handler="twilio">Send Me SMS (via Twilio)</button>
         </form>
     </div>
 </div>
