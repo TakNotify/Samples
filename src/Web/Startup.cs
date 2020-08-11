@@ -42,6 +42,12 @@ namespace Web
                     options.Apikey = Configuration.GetValue<string>("SendGrid:ApiKey");
                     options.DefaultFromAddress = Configuration.GetValue<string>("SendGrid:DefaultFromAddress");
                 })
+                .AddProvider<MailgunProvider, MailgunOptions>(options =>
+                {
+                    options.Apikey = Configuration.GetValue<string>("Mailgun:ApiKey");
+                    options.DefaultFromAddress = Configuration.GetValue<string>("Mailgun:DefaultFromAddress");
+                    options.Domain = Configuration.GetValue<string>("Mailgun:Domain");
+                }, true)
                 .AddProvider<TwilioProvider, TwilioOptions>(options =>
                 {
                     options.AccountSid = Configuration.GetValue<string>("Twilio:AccountSid");

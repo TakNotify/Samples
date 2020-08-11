@@ -130,6 +130,34 @@ namespace Web.Pages
             return RedirectToPage();
         }
 
+        public async Task<IActionResult> OnPostMailgun(string data)
+        {
+            var message = new MailgunMessage()
+            {
+                ToAddresses = new List<string> { Email },
+                Subject = "[TakNotify - Mailgun] Weather Forecast",
+                PlainContent = $"Forecast: {data}"
+            };
+
+            var result = await _notification.SendEmailWithMailgun(message);
+
+            TempData["Email"] = Email;
+            TempData["WeatherData"] = data;
+
+            if (result.IsSuccess)
+            {
+                TempData["SuccessMessage"] = $"Email notification was sent to {string.Join(", ", message.ToAddresses)} via Mailgun";
+                _logger.LogDebug("Email notification was sent to {toAddresses} via Mailgun", message.ToAddresses);
+            }
+            else
+            {
+                TempData["ErrorMessage"] = $"Failed to send notification to {string.Join(", ", message.ToAddresses)} via Mailgun. Please see the log.";
+                _logger.LogWarning("Failed to send notification to {toAddresses} via Mailgun. Error: {error}", message.ToAddresses, result.Errors);
+            }
+
+            return RedirectToPage();
+        }
+
         public async Task<IActionResult> OnPostTwilio(string data)
         {
             var message = new SMSMessage()
