@@ -48,6 +48,13 @@ namespace Web
                     options.DefaultFromAddress = Configuration.GetValue<string>("Mailgun:DefaultFromAddress");
                     options.Domain = Configuration.GetValue<string>("Mailgun:Domain");
                 }, true)
+                .AddProvider<AmazonSESProvider, AmazonSESOptions>(options =>
+                {
+                    options.AccessKey = Configuration.GetValue<string>("AmazonSES:AccessKey");
+                    options.SecretKey = Configuration.GetValue<string>("AmazonSES:SecretKey");
+                    options.RegionEndpoint = Configuration.GetValue<string>("AmazonSES:RegionEndpoint");
+                    options.DefaultFromAddress = Configuration.GetValue<string>("AmazonSES:DefaultFromAddress");
+                })
                 .AddProvider<TwilioProvider, TwilioOptions>(options =>
                 {
                     options.AccountSid = Configuration.GetValue<string>("Twilio:AccountSid");

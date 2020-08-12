@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="TakNotify.AspNetCore" Version="1.1.1" />
+    <PackageReference Include="TakNotify.Provider.AmazonSES" Version="1.0.0" />
     <PackageReference Include="TakNotify.Provider.Mailgun" Version="1.0.0" />
     <PackageReference Include="TakNotify.Provider.SendGrid" Version="1.2.0" />
     <PackageReference Include="TakNotify.Provider.Smtp" Version="1.2.1" />
