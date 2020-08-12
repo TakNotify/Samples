@@ -158,6 +158,34 @@ namespace Web.Pages
             return RedirectToPage();
         }
 
+        public async Task<IActionResult> OnPostAmazonSES(string data)
+        {
+            var message = new AmazonSESMessage()
+            {
+                ToAddresses = new List<string> { Email },
+                Subject = "[TakNotify - Amazon SES] Weather Forecast",
+                PlainContent = $"Forecast: {data}"
+            };
+
+            var result = await _notification.SendEmailWithAmazonSES(message);
+
+            TempData["Email"] = Email;
+            TempData["WeatherData"] = data;
+
+            if (result.IsSuccess)
+            {
+                TempData["SuccessMessage"] = $"Email notification was sent to {string.Join(", ", message.ToAddresses)} via Amazon SES";
+                _logger.LogDebug("Email notification was sent to {toAddresses} via Amazon SES", message.ToAddresses);
+            }
+            else
+            {
+                TempData["ErrorMessage"] = $"Failed to send notification to {string.Join(", ", message.ToAddresses)} via Amazon SES. Please see the log.";
+                _logger.LogWarning("Failed to send notification to {toAddresses} via Amazon SES. Error: {error}", message.ToAddresses, result.Errors);
+            }
+
+            return RedirectToPage();
+        }
+
         public async Task<IActionResult> OnPostTwilio(string data)
         {
             var message = new SMSMessage()
